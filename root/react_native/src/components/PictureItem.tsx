@@ -2,6 +2,8 @@ import * as React from "react";
 import { View, StyleSheet, Pressable, Dimensions } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { Destination } from "../types/destination";
+import { Music } from "../types/music";
+import { Picture } from "../types/picture";
 
 // types
 
@@ -11,19 +13,16 @@ const PADDING = 16;
 const IMAGE_WIDTH = CONTAINER_WIDTH - PADDING * 2;
 
 type Props = {
-  destination: Destination;
+  picture: Picture;
   onPress: () => void;
 };
 
-export const DestinationItem: React.FC<Props> = ({
-  destination,
-  onPress,
-}: Props) => {
-  const { name, topImageUrl } = destination;
+export const PictureItem: React.FC<Props> = ({ picture, onPress }: Props) => {
+  const { name, url } = picture;
   return (
     <Pressable style={styles.container} onPress={onPress}>
       <Text style={styles.text}>{name}</Text>
-      <Image source={{ uri: topImageUrl }} style={styles.image} />
+      <Image source={{ uri: url }} style={styles.image} />
     </Pressable>
   );
 };

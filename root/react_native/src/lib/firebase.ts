@@ -2,10 +2,14 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 import Constants from "expo-constants";
-import { Destination } from "../types/Destination";
+import { Destination } from "../types/destination";
+import { initialUser, User } from "../types/user";
+import { Food } from "../types/food";
+import { Music } from "../types/music";
+import { Picture } from "../types/picture";
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(Constants.manifest?.extra!.firebase);
+  firebase.initializeApp(Constants.manifest!.extra!.firebase);
 }
 
 //firestore databaseからデータを取得
@@ -13,38 +17,39 @@ export const getDestination = async () => {
   const snapshot = await firebase
     .firestore()
     .collection("destination")
-    .orderBy("id", "desc")
+    // .orderBy("id", "desc")
     .get();
   const destinations = snapshot.docs.map(
     (doc) => ({ ...doc.data(), id: doc.id } as Destination)
   );
+
   return destinations;
 };
 
-// export const signin = async () => {
-//   const userCredential = await firebase.auth().signInAnonymously();
-//   const { uid } = userCredential.user!;
-//   const userDoc = await firebase.firestore().collection("users").doc(uid).get();
+export const signin = async () => {
+  const userCredential = await firebase.auth().signInAnonymously();
+  const { uid } = userCredential.user!;
+  const userDoc = await firebase.firestore().collection("users").doc(uid).get();
 
-//   if (!userDoc.exists) {
-//     console.log("ユーザー登録なし");
-//     await firebase.firestore().collection("users").doc(uid).set(initialUser);
-//     return {
-//       ...initialUser,
-//       id: uid,
-//     } as User;
-//   } else {
-//     console.log("ユーザー登録あり");
-//     return {
-//       id: uid,
-//       ...userDoc.data(),
-//     } as User;
-//   }
-// };
+  if (!userDoc.exists) {
+    console.log("ユーザー登録なし");
+    await firebase.firestore().collection("users").doc(uid).set(initialUser);
+    return {
+      ...initialUser,
+      id: uid,
+    } as User;
+  } else {
+    console.log("ユーザー登録あり");
+    return {
+      id: uid,
+      ...userDoc.data(),
+    } as User;
+  }
+};
 
-// export const updateUser = async (userId: string, params: any) => {
-//   await firebase.firestore().collection("users").doc(userId).update(params);
-// };
+export const updateUser = async (userId: string, params: any) => {
+  await firebase.firestore().collection("users").doc(userId).update(params);
+};
 
 // export const createReviewRef = async (shopId: string) => {
 //   return await firebase
@@ -71,15 +76,33 @@ export const getDestination = async () => {
 //   }
 //   return downloadUrl;
 // };
-// export const getReviews = async (shopId: string) => {
-//   const reviewDocs = await firebase
-//     .firestore()
-//     .collection("shops")
-//     .doc(shopId)
-//     .collection("reviews")
-//     .orderBy("createdAt", "desc")
-//     .get();
-//   return reviewDocs.docs.map(
-//     (doc) => ({ ...doc.data(), id: doc.id } as Review)
-//   );
-// };
+export const getFoods = async (destId: string) => {
+  const foodDocs = await firebase
+    .firestore()
+    .collection("destination")
+    .doc(destId)
+    .collection("foods")
+    // .orderBy("createdAt", "desc")
+    .get();
+  return foodDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Food));
+};
+export const getMusics = async (destId: string) => {
+  const foodDocs = await firebase
+    .firestore()
+    .collection("destination")
+    .doc(destId)
+    .collection("musics")
+    // .orderBy("createdAt", "desc")
+    .get();
+  return foodDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Music));
+};
+export const getPictures = async (destId: string) => {
+  const foodDocs = await firebase
+    .firestore()
+    .collection("destination")
+    .doc(destId)
+    .collection("pictures")
+    // .orderBy("createdAt", "desc")
+    .get();
+  return foodDocs.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Picture));
+};
