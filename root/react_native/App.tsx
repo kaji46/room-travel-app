@@ -1,27 +1,35 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Image, Text, Input } from "react-native-elements";
+import {
+  useEffect,
+  useState,
+} from "react-native-vector-icons/node_modules/@types/react";
+import { DestinationItem } from "./src/components/DestinationItem";
+import { getDestination } from "./src/lib/firebase";
+import { Destination } from "./src/types/Destination";
 
 export default function App() {
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  useEffect(() => {
+    getFirebaseItems();
+  }, []);
+  const getFirebaseItems = async () => {
+    const destinations = await getDestination();
+    setDestinations(destinations);
+  };
   const onPress = () => {
     // 観光地の詳細ページへ遷移
   };
+  const destinationItems = destinations.map((destination, index) => {
+    <DestinationItem destination={destination} key={index.toString()} />;
+  });
   return (
     <View style={styles.container}>
       <Input placeholder="行き先はどちらですか？" />
 
       <Text h1>今日の旅行先を選択</Text>
-
-      <Pressable onPress={onPress}>
-        <Text h2>沖縄県</Text>
-        <Image
-          source={{
-            uri: "https://cookbiz.jp/soken/core/wp-content/uploads/2019/09/Fotolia_225618711_S.jpg",
-          }}
-          style={{ width: 200, height: 200 }}
-        />
-      </Pressable>
+      {destinationItems}
     </View>
   );
 }

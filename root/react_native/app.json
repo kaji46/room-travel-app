@@ -25,6 +25,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyCHWj2F77my40eJYrtj1tth1n4bZMadVNk",
+        "authDomain": "room-travel.firebaseapp.com",
+        "projectId": "room-travel",
+        "storageBucket": "room-travel.appspot.com",
+        "messagingSenderId": "63301679125",
+        "appId": "1:63301679125:web:0b89598f3aea177c05361c",
+        "measurementId": "G-EPZK1LCPZ6"
+      }
     }
   }
 }
